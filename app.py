@@ -1,4 +1,8 @@
 import streamlit as st
+from config.database import init_db  
+
+# Inisialisasi database dan aturan
+init_db()
 
 # Inisialisasi session state
 if "logged_in" not in st.session_state:
@@ -19,9 +23,10 @@ st.set_page_config(
 )
 
 home_page = st.Page("pages/home.py", title="Home", icon=":material/home:", default=True)
+dashboard = st.Page("pages/dashboard.py", title="Dashboard", icon=":material/dashboard:")
+
 login_page = st.Page("pages/login.py", title="Log in", icon=":material/login:")
 logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
-dashboard = st.Page("pages/database.py", title="Database", icon=":material/dashboard:")
 
 if st.session_state.logged_in:
     if st.session_state.role == "admin":
@@ -39,6 +44,9 @@ if st.session_state.logged_in:
             }
         )
 else:
-    pg = st.navigation([login_page, home_page])
+    pg = st.navigation([
+        login_page, 
+        home_page, 
+        ])
 
 pg.run()

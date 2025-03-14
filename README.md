@@ -14,6 +14,10 @@ Pastikan Anda sudah menginstal **Python 3.10+** di sistem Anda.
 pip install streamlit
 ```
 
+```sh
+pip install streamlit-agraph
+```
+
 ### 2. Jalankan aplikasi
 
 ```sh
