@@ -14,10 +14,6 @@ Pastikan Anda sudah menginstal **Python 3.10+** di sistem Anda.
 pip install streamlit
 ```
 
-```sh
-pip install streamlit-agraph
-```
-
 ### 2. Jalankan aplikasi
 
 ```sh
@@ -35,8 +31,9 @@ rekomendasi_jurusan/
 │── config/..            # Configurasi Database
 │── models/..            # Fungsi yang di gunakan
 │── pages/
+│   ├── tabs/..          # Tab dashboard
 │   ├── home.py          # Halaman utama
-│   ├── database.py      # Halaman database
+│   ├── dashboard.py     # Halaman dashboard
 │   ├── login.py         # Halaman login
 └── README.md            # Dokumentasi proyek
 ```

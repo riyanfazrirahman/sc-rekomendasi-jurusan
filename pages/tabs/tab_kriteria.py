@@ -14,7 +14,7 @@ def show():
     )
   
     # Menambahkan kriteria baru
-    row1_col1, row1_col2, row1_col3, row1_col4_b1 = st.columns(4)
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
     with row1_col1:
         row1_col1_a, row1_col1_b = st.columns(2) 
         with row1_col1_a:
@@ -39,7 +39,7 @@ def show():
         with row2_col1_b:
             nama_kriteria_baru = st.text_input("Nama Kriteria")
         
-        row2_col1_row1_col1, row2_col1_row1_col2, row2_col1_row1_col3, row2_col1_row1_col4 = st.columns(4)
+        row2_col1_row1_col1, row2_col1_row1_col2, row2_col1_row1_col3 = st.columns(3)
         with row2_col1_row1_col1:
             if st.button("Tambahkan Kriteria",  use_container_width=True):
                 if kode_kriteria_baru and nama_kriteria_baru:
@@ -55,7 +55,7 @@ def show():
         kriteria_list = get_kode_kriteria()
         kriteria_selected = st.multiselect("Pilih kode kriteria yang akan hapus:", kriteria_list)
 
-        row2_col2_row2_col1, row2_col2_row2_col2, row2_col2_row2_col3, row2_col2_row2_col4 = st.columns(4)
+        row2_col2_row2_col1, row2_col2_row2_col2, row2_col2_row2_col3 = st.columns(3)
         with row2_col2_row2_col1:
             if st.button("Hapus Kriteria",  use_container_width=True):
                 if kriteria_selected:

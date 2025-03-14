@@ -1,6 +1,7 @@
 import streamlit as st
-from models.rekomendasi_model import get_relations, get_recommendation
+import graphviz
 from models.kriteria_model import get_options_kriteria
+from models.rekomendasi_model import *
 
 # Halaman Home
 st.title("🎓 Sistem Rekomendasi Jurusan dengan Probabilitas")
@@ -23,6 +24,26 @@ if tombol_rekomendasi:
             for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
                 st.progress(persen / 100)
                 st.write(f"**{jurusan}: {persen:.2f}%**")
+
+            # Ambil hanya hubungan yang sesuai dengan jurusan yang direkomendasikan
+            relations = get_relations_filtered(list(hasil_rekomendasi.keys()))
+
+            # Buat visualisasi terpisah untuk setiap jurusan
+            for jurusan in hasil_rekomendasi.keys():
+                graph = graphviz.Digraph(engine="neato")
+                graph.attr(rankdir="TB", size="6,4", nodesep="0.5", ranksep="0.5")
+
+                st.markdown(f"### 🎓 {jurusan}")
+
+                # Tambahkan hubungan hanya yang terkait dengan jurusan ini
+                for parent, child in relations:
+                    if child == jurusan:  # Tidak perlu filter di sini jika pakai SQL
+                        graph.edge(parent, child)
+
+                # Tampilkan diagram untuk jurusan ini
+                st.graphviz_chart(graph, use_container_width=True)
+
+
         else:
             st.warning("⚠️ Tidak ada rekomendasi yang sesuai.")
     else:

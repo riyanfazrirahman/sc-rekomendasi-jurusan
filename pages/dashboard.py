@@ -17,4 +17,3 @@ with tab2:
 
 with tab3:
     tab_kriteria.show()
-

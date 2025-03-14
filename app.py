@@ -47,6 +47,7 @@ else:
     pg = st.navigation([
         login_page, 
         home_page, 
+        dashboard
         ])
 
 pg.run()

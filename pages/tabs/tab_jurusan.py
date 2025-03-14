@@ -14,7 +14,7 @@ def show():
     )
     
     # Menambahkan jurusan baru
-    row1_col1, row1_col2, row1_col3, row1_col4_b1 = st.columns(4)
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
     with row1_col1:
         row1_col1_a, row1_col1_b = st.columns(2) 
         with row1_col1_a:
@@ -39,7 +39,7 @@ def show():
         with row2_col1_b:
             nama_jurusan_baru = st.text_input("Nama Jurusan")
         
-        row2_col1_row1_col1, row2_col1_row1_col2, row2_col1_row1_col3, row2_col1_row1_col4 = st.columns(4)
+        row2_col1_row1_col1, row2_col1_row1_col2, row2_col1_row1_col3 = st.columns(3)
         with row2_col1_row1_col1:
             if st.button("Tambahkan Jurusan",  use_container_width=True):
                 if kode_jurusan_baru and nama_jurusan_baru:
@@ -55,7 +55,7 @@ def show():
         jurusan_list = get_kode_jurusan()
         jurusan_selected = st.multiselect("Pilih kode jurusan yang akan hapus:", jurusan_list)
 
-        row2_col2_row2_col1, row2_col2_row2_col2, row2_col2_row2_col3, row2_col2_row2_col4 = st.columns(4)
+        row2_col2_row2_col1, row2_col2_row2_col2, row2_col2_row2_col3, = st.columns(3)
         with row2_col2_row2_col1:
             if st.button("Hapus Jurusan",  use_container_width=True):
                 if jurusan_selected:

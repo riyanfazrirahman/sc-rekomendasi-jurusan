@@ -7,12 +7,32 @@ def get_relations():
     conn = sqlite3.connect("rekomendasi.db")
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT kriteria.nama_kriteria, jurusan.nama_jurusan 
+        SELECT kriteria.kode_kriteria, jurusan.kode_jurusan 
         FROM aturan
         JOIN kriteria ON aturan.id_kriteria = kriteria.id_kriteria
         JOIN jurusan ON aturan.id_jurusan = jurusan.id_jurusan
     """)
     hasil = cursor.fetchall()  # List pasangan (kriteria, jurusan)
+    conn.close()
+    return hasil
+
+def get_relations_filtered(jurusan_list):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    
+    # Buat format query dengan filter jurusan
+    placeholders = ", ".join(["?" for _ in jurusan_list])
+    query = f"""
+        SELECT kriteria.kode_kriteria, jurusan.kode_jurusan 
+        FROM aturan
+        JOIN kriteria ON aturan.id_kriteria = kriteria.id_kriteria
+        JOIN jurusan ON aturan.id_jurusan = jurusan.id_jurusan
+        WHERE jurusan.nama_jurusan IN ({placeholders})
+    """
+    
+    cursor.execute(query, jurusan_list)
+    hasil = cursor.fetchall()  # List pasangan (kriteria, jurusan)
+    
     conn.close()
     return hasil
 
