@@ -1,0 +1,6 @@
+streamlit==1.30.0
+streamlit-agraph==0.0.42
+pandas==2.2.0
+numpy==1.26.4
+matplotlib==3.8.2
+sqlite3  # Bawaan Python, biasanya tidak perlu ditulis
