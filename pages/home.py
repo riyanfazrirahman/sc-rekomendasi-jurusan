@@ -1,50 +1,152 @@
 import streamlit as st
-import graphviz
-from models.kriteria_model import get_options_kriteria
+from models.pertanyaan_model import format_pertanyaan_kriteria
+from models.history_model import simpan_jawaban
 from models.rekomendasi_model import *
+from pages.component.chart_tree import generate_tree
 
 # Halaman Home
-st.title("🎓 Sistem Rekomendasi Jurusan dengan Probabilitas")
+st.title("🎓 Sistem Rekomendasi Jurusan Kuliah di STMIK Palangkaraya")
 st.markdown("---")
 
-st.subheader("📌 Pilih Kriteria Kamu")
 
-# Input kriteria dari user
-kriteria_list = get_options_kriteria()
-kriteria_user = st.multiselect("Pilih kriteria yang sesuai dengan kamu:", kriteria_list)
+# Inisialisasi tempat simpan jawaban di session_state
+if "jawaban_user" not in st.session_state:
+    st.session_state["jawaban_user"] = {}
 
-# Tombol rekomendasi
-tombol_rekomendasi = st.button("🔍 Dapatkan Rekomendasi")
-if tombol_rekomendasi:
-    if kriteria_user:
-        hasil_rekomendasi = get_recommendation(kriteria_user)
+if "kategori_index" not in st.session_state:
+    st.session_state["kategori_index"] = 0
+
+data = format_pertanyaan_kriteria()
+
+def tampilkan_form():
+    kategori_dict = {}
+
+    for kode_kat, nama_kat, kode_p, pertanyaan, jenis_p, kode_k, nama_k in data:
+        if nama_kat not in kategori_dict:
+            kategori_dict[nama_kat] = {}
+        if pertanyaan not in kategori_dict[nama_kat]:
+            kategori_dict[nama_kat][pertanyaan] = {
+                "jenis": jenis_p,
+                "kriteria": [],
+                "kode_kriteria": []
+            }
+        if kode_k and nama_k:
+            kategori_dict[nama_kat][pertanyaan]["kriteria"].append(nama_k)
+            kategori_dict[nama_kat][pertanyaan]["kode_kriteria"].append(kode_k)
+
+    kategori_list = list(kategori_dict.keys())
+    selected_kategori = kategori_list[st.session_state["kategori_index"]]
+    st.header(f"📌 {selected_kategori}")
+
+    with st.container(border=True):
+        pertanyaan_dict = kategori_dict[selected_kategori]
+        for pertanyaan, info in pertanyaan_dict.items():
+            st.subheader(f"🔹 {pertanyaan}")
+
+            col_left, col_center = st.columns([0.1, 10])
+            with col_center:
+                with st.container():
+                    if info["jenis"] == "multiple":
+                        if pertanyaan not in st.session_state["jawaban_user"]:
+                            st.session_state["jawaban_user"][pertanyaan] = []
+                        
+                        selected_options = st.session_state["jawaban_user"][pertanyaan]
+                        for i, kriteria in enumerate(info["kriteria"]):
+                            kode_kriteria = info["kode_kriteria"][i]
+                            if st.checkbox(kriteria, key=f"{selected_kategori}_{pertanyaan}_{kode_kriteria}",
+                                        value=kode_kriteria in selected_options):
+                                if kode_kriteria not in selected_options:
+                                    selected_options.append(kode_kriteria)
+                            else:
+                                if kode_kriteria in selected_options:
+                                    selected_options.remove(kode_kriteria)
+                        st.session_state["jawaban_user"][pertanyaan] = selected_options
+                    else:
+                        options_dict = {info["kriteria"][i]: info["kode_kriteria"][i] for i in range(len(info["kriteria"]))}
+                        selected_label = next((label for label, kode in options_dict.items() if kode == st.session_state["jawaban_user"].get(pertanyaan)), None)
+                        radio_options = list(options_dict.keys())
+                        selected_label = st.radio(
+                            "Pilih salah satu:", 
+                            radio_options,
+                            index=radio_options.index(selected_label) if selected_label else None,
+                            key=f"{selected_kategori}_{pertanyaan}"
+                        )
+                        st.session_state["jawaban_user"][pertanyaan] = options_dict.get(selected_label, None)
         
-        if hasil_rekomendasi:
-            st.markdown("### 📊 Hasil Rekomendasi")
-            for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
-                st.progress(persen / 100)
-                st.write(f"**{jurusan}: {persen:.2f}%**")
+        st.markdown("---")
 
-            # Ambil hanya hubungan yang sesuai dengan jurusan yang direkomendasikan
-            relations = get_relations_filtered(list(hasil_rekomendasi.keys()))
+    # Navigasi kategori
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1,2, 4])
+    with col1:
+        st.button("⬅️ Previous", use_container_width=True,
+                  disabled=st.session_state["kategori_index"] == 0,
+                  on_click=lambda: st.session_state.update(kategori_index=st.session_state["kategori_index"] - 1)
+                  if st.session_state["kategori_index"] > 0 else None)
+    with col2:
+        st.button("Next ➡️", use_container_width=True,
+                disabled=st.session_state["kategori_index"] >= len(kategori_list) - 1,  # Disable kalau mentok
+                on_click=lambda: st.session_state.update(kategori_index=st.session_state["kategori_index"] + 1) 
+                if st.session_state["kategori_index"] < len(kategori_list) - 1 else None)
 
-            # Buat visualisasi terpisah untuk setiap jurusan
-            for jurusan in hasil_rekomendasi.keys():
-                graph = graphviz.Digraph(engine="neato")
-                graph.attr(rankdir="TB", size="6,4", nodesep="0.5", ranksep="0.5")
+    # Variabel untuk menyimpan pesan hasil_rekomendasi
+    hasil_rekomendasi = None 
+    data_riwayat={}
+    massage = ""
+    with col3:
+        if st.button("🔄 Refresh", use_container_width=True):
+            # Reset semua state yang relevan
+            st.session_state["kategori_index"] = 0
+            st.session_state["jawaban_user"] = {}
+            # Bersihkan hasil_rekomendasi dan massage
+            massage = ""
+            hasil_rekomendasi = None
+            data_riwayat = []
+            # Streamlit akan otomatis rerender halaman karena state berubah
+            
+    with col4:
+        # Hanya tampilkan tombol rekomendasi jika sudah di kategori terakhir
+        if st.session_state["kategori_index"] == len(kategori_list) - 1:
+            tombol_rekomendasi = st.button("🔍 Dapatkan Rekomendasi", use_container_width=True)
+            if tombol_rekomendasi:
+                kriteria_user = []
+                for jawaban in st.session_state["jawaban_user"].values():
+                    if isinstance(jawaban, list):
+                        kriteria_user.extend(jawaban)
+                    elif jawaban:
+                        kriteria_user.append(jawaban)
+                if kriteria_user:
+                    kode_unik = simpan_jawaban(st.session_state["jawaban_user"])
+                    massage = f"✅ Jawaban berhasil disimpan dengan kode: `{kode_unik}`"
+                    # Konversi jawaban_user ke data_riwayat (list kode kriteria)
+                    data_riwayat = kriteria_user  # Pastikan kriteria_user berupa list kode kriteria
 
-                st.markdown(f"### 🎓 {jurusan}")
+                    hasil_rekomendasi = get_recommendation(kriteria_user)
+                    
+                    if not hasil_rekomendasi:
+                        massage = "⚠️ Tidak ada rekomendasi yang sesuai."
+                else:
+                    massage = "⚠️ Silakan pilih minimal satu kriteria."
 
-                # Tambahkan hubungan hanya yang terkait dengan jurusan ini
-                for parent, child in relations:
-                    if child == jurusan:  # Tidak perlu filter di sini jika pakai SQL
-                        graph.edge(parent, child)
+    # Tampilkan hasil rekomendasi di luar kolom tombol (di luar `col3`)
+    if hasil_rekomendasi:
+        st.markdown("### 📊 Hasil Rekomendasi")
+        for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
+            st.progress(persen / 100)
+            st.write(f"**{jurusan}: {persen:.2f}%**")
+        
+        # Generate dan tampilkan pohon keputusan
+        st.markdown("### 🌳 Pohon Keputusan")
+        dot = generate_tree(data_riwayat)
+        st.graphviz_chart(dot)
+                
 
-                # Tampilkan diagram untuk jurusan ini
-                st.graphviz_chart(graph, use_container_width=True)
+    # Tampilkan pesan setelah tombol diklik
+    if massage:
+        st.warning(massage)
 
 
-        else:
-            st.warning("⚠️ Tidak ada rekomendasi yang sesuai.")
-    else:
-        st.warning("⚠️ Silakan pilih minimal satu kriteria.")
+if "jawaban_user" not in st.session_state or not isinstance(st.session_state["jawaban_user"], dict):
+    st.session_state["jawaban_user"] = {}
+
+if data:
+    tampilkan_form()

@@ -7,7 +7,7 @@ import pages.tabs.tab_kriteria as tab_kriteria
 st.title("📊 Dashboard")
 
 # Tab 
-tab1, tab2, tab3 = st.tabs(["Data Aturan", "Data Jurusan", "Data Kriteria"])
+tab1, tab2, tab3= st.tabs(["Data Aturan", "Data Jurusan", "Data Kriteria"])
 
 with tab1:
     tab_aturan.show()

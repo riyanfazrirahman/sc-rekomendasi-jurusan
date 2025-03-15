@@ -24,6 +24,9 @@ st.set_page_config(
 
 home_page = st.Page("pages/home.py", title="Home", icon=":material/home:", default=True)
 dashboard = st.Page("pages/dashboard.py", title="Dashboard", icon=":material/dashboard:")
+tabel_pertanyaan = st.Page("pages/pertanyaan.py", title="Tabel Pertanyaan", icon=":material/dashboard:")
+history = st.Page("pages/history.py", title="Riwayat", icon=":material/dashboard:")
+tree = st.Page("pages/tree.py", title="Tree", icon=":material/dashboard:")
 
 login_page = st.Page("pages/login.py", title="Log in", icon=":material/login:")
 logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
@@ -33,21 +36,27 @@ if st.session_state.logged_in:
         pg = st.navigation(
             {
                 "Account": [logout_page],
-                "Menu": [home_page, dashboard],
+                "Menu": [
+                    home_page, 
+                    dashboard,
+                    tabel_pertanyaan,
+                    history
+                ],
             }
         )
     elif st.session_state.role == "user":
         pg = st.navigation(
             {
                 "Account": [logout_page],
-                "Menu": [home_page],
+                "Menu": [
+                    home_page
+                ],
             }
         )
 else:
     pg = st.navigation([
         login_page, 
         home_page, 
-        dashboard
         ])
 
 pg.run()

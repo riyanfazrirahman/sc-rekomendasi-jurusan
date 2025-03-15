@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 from collections import Counter
 
 # Ambil semua hubungan kriteria → jurusan
@@ -42,19 +41,19 @@ def get_recommendation(kriteria_user):
     cursor = conn.cursor()
 
     if not kriteria_user:
-        return {}  # Jika tidak ada input, return dictionary kosong
+        return {}  # Jika tidak ada input, return kosong
 
-    # Dapatkan id_kriteria dari nama_kriteria dengan parameter binding
+    # Dapatkan id_kriteria dari nama_kriteria
     placeholder = ", ".join(["?"] * len(kriteria_user))
-    query = f"SELECT id_kriteria FROM kriteria WHERE nama_kriteria IN ({placeholder})"
+    query = f"SELECT id_kriteria FROM kriteria WHERE kode_kriteria IN ({placeholder})"
     cursor.execute(query, kriteria_user)
     id_kriteria_list = [row[0] for row in cursor.fetchall()]
 
     if not id_kriteria_list:
         conn.close()
-        return {}  # Jika tidak ada id_kriteria yang cocok, return kosong
+        return {}  # Jika tidak ada yang cocok, return kosong
 
-    # Ambil daftar jurusan berdasarkan id_kriteria yang cocok, langsung `JOIN` dengan tabel jurusan
+    # 🔥 Cari jurusan berdasarkan id_kriteria
     placeholder = ", ".join(["?"] * len(id_kriteria_list))
     query = f"""
         SELECT jurusan.nama_jurusan 
@@ -66,7 +65,7 @@ def get_recommendation(kriteria_user):
     hasil = cursor.fetchall()
 
     if hasil:
-        jurusan_counts = Counter([item[0] for item in hasil])  # Count berdasarkan nama jurusan
+        jurusan_counts = Counter([item[0] for item in hasil])  # Hitung kemunculan jurusan
         total_rules_matched = sum(jurusan_counts.values())
 
         probabilitas = {jurusan: (count / total_rules_matched) * 100 
