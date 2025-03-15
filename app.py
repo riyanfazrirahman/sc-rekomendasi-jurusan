@@ -57,6 +57,7 @@ else:
     pg = st.navigation([
         login_page, 
         home_page, 
+        history
         ])
 
 pg.run()
