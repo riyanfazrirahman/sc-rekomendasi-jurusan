@@ -19,7 +19,7 @@ def simpan_jawaban(jawaban_user):
     jawaban_json = json.dumps(kriteria_terpilih, sort_keys=True)
 
     # Debugging: Pastikan hanya kode kriteria yang disimpan
-    print("DEBUG: Data yang disimpan ->", jawaban_json)
+    # print("DEBUG: Data yang disimpan ->", jawaban_json)
 
     # Cek apakah jawaban sudah ada di database
     cursor.execute("SELECT kode FROM riwayat_jawaban WHERE jawaban = ?", (jawaban_json,))

@@ -19,14 +19,14 @@ def generate_tree(data_riwayat):
     dot = graphviz.Digraph()
 
     # Root
-    dot.node("root", "Rekomendasi Jurusan\nKuliah di STMIKPLK")
+    dot.node("root", "Rekomendasi Jurusan Kuliah\nSTMIK Palangka Raya")
 
     # Ambil data aturan
     df_aturan = get_all_aturan()
 
     # Debug: Tampilkan isi df_aturan
-    print("Data aturan dari database:")
-    print(df_aturan)
+    # print("Data aturan dari database:")
+    # print(df_aturan)
 
     # Jika df_aturan kosong, tambahkan pesan error di pohon
     if df_aturan.empty:
@@ -89,13 +89,13 @@ def generate_tree(data_riwayat):
         nodes_list = group['kode_kriteria'].tolist()  # Daftar kode_kriteria untuk jurusan ini
 
         # Debug: Tampilkan nodes_list untuk setiap jurusan
-        print(f"Nodes untuk jurusan {kode_jurusan}: {nodes_list}")
+        # print(f"Nodes untuk jurusan {kode_jurusan}: {nodes_list}")
 
         # Tambahkan jalur untuk jurusan ini
         add_path(nodes_list, parent_node, kode_jurusan, jurusan_name, color)
 
     # Debug: Tampilkan semua node yang ditambahkan
-    print(f"Semua node yang ditambahkan: {added_nodes}")
+    # print(f"Semua node yang ditambahkan: {added_nodes}")
 
     # Jika tidak ada jalur yang cocok dengan data_riwayat, tambahkan pesan
     if len(added_nodes) <= len(jurusan_info) + 1:  # Hanya root dan cabang utama
