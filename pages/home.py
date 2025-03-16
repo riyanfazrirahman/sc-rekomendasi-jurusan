@@ -49,6 +49,7 @@ def tampilkan_form():
             st.markdown("---")
             with col_center:
                 with st.container():
+                    # Input Jawaban Pengguna
                     if info["jenis"] == "multiple":
                         if pertanyaan not in st.session_state["jawaban_user"]:
                             st.session_state["jawaban_user"][pertanyaan] = []
@@ -79,7 +80,6 @@ def tampilkan_form():
                         st.session_state["jawaban_user"][pertanyaan] = options_dict.get(selected_label, None)
                         st.markdown(f"<p style='text-align: center; margin-top: 1rem; '></p>",unsafe_allow_html=True)
 
-        
     st.markdown(f"<p style='text-align: center; margin-top: 2rem; '></p>",unsafe_allow_html=True)
 
     # Navigasi kategori

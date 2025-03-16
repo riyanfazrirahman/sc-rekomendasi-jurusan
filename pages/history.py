@@ -14,6 +14,7 @@ with col_e:
         user_id = st.session_state.get("user_id")
         role = st.session_state.get("role")
 
+    # role = "admin"
     if role == "admin":
         riwayat_list = get_all_history_jawaban()
     else:

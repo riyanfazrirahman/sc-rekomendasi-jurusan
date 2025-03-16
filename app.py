@@ -32,7 +32,6 @@ tabel_pertanyaan = st.Page("pages/tabel_pertanyaan.py", title="Tabel Pertanyaan"
 history = st.Page("pages/history.py", title="Riwayat", icon="📜")
 tree = st.Page("pages/tree.py", title="Tree", icon="🌳")
 setting = st.Page("pages/setting.py", title="Setting", icon="⚙️")
-
 login_page = st.Page("pages/auth.py", title="Log in", icon=":material/login:")
 logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
 
