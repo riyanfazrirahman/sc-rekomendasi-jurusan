@@ -67,10 +67,11 @@ if st.session_state.logged_in:
         )
 else:
     pg = st.navigation([
-        login_page, 
+        login_page,
+        # setting, 
         home_page, 
-        tabel_rekomendasi,
-        tabel_pertanyaan,
+        # tabel_rekomendasi,
+        # tabel_pertanyaan,
+        # history
     ])
-
 pg.run()

@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-# Tamabah data jurusan
+# Tamabah data kriteria
 def add_kriteria(kode_kriteria_baru, nama_kriteria_baru):
     conn = sqlite3.connect("rekomendasi.db")
     cursor = conn.cursor()

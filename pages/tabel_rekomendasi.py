@@ -4,7 +4,7 @@ import pages.tabs.tab_jurusan as tab_jurusan
 import pages.tabs.tab_kriteria as tab_kriteria
 
 # Halaman Dashboard
-st.title("📊 Dashboard")
+st.title("📊 Tabel Rekomendasi")
 
 # Tab 
 tab1, tab2, tab3= st.tabs(["Data Aturan", "Data Jurusan", "Data Kriteria"])

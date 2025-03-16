@@ -85,7 +85,20 @@ def delete_jurusan_by_kode(kode_jurusan):
 def delete_all_jurusan():
     conn = sqlite3.connect("rekomendasi.db")
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM aturan")
-    cursor.execute("DELETE FROM jurusan")  # Hapus semua kriteria
-    conn.commit()
+
+    # Hitung jumlah jurusan sebelum menghapus
+    cursor.execute("SELECT COUNT(*) FROM jurusan")
+
+    if jumlah_kategori > 0:
+        jumlah_kategori = cursor.fetchone()[0]
+        cursor.execute("DELETE FROM aturan")    # Hapus semua aturan
+        cursor.execute("DELETE FROM jurusan")   # Hapus semua jurusan
+        conn.commit()
+        pesan = "✅ Semua kategori berhasil dihapus."
+    else:
+        pesan = "⚠️ Tidak ada kategori yang bisa dihapus."
+
     conn.close()
+    return pesan  # Selalu mengembalikan pesan (string)
+
+

@@ -43,36 +43,35 @@ def table_kriteria():
         ("F13", "Senang belajar tentang kecerdasan buatan dan robotika."),
         ("F14", "Tertarik mengembangkan teknologi baru yang dapat digunakan dalam berbagai industri."),
         ("F15", "Tertarik untuk bekerja di bidang teknologi yang terus berkembang."),
-        ("F16", "Jenjang Pendidikan Strata-1 (S1)"),
-        ("F17", "Tertarik untuk mengelola dan mengorganisir informasi di komputer."),
-        ("F18", "Senang bekerja dengan data untuk membantu perusahaan atau organisasi."),
-        ("F19", "Ingin belajar bagaimana teknologi bisa digunakan untuk mempermudah pekerjaan sehari-hari."),
-        ("F20", "Suka membuat website atau aplikasi yang digunakan orang banyak."),
-        ("F21", "Tertarik dengan bagaimana perusahaan menggunakan teknologi untuk menjalankan bisnis."),
-        ("F22", "Senang menganalisis data untuk membantu orang mengambil keputusan penting."),
-        ("F23", "Tertarik untuk belajar cara membuat aplikasi yang mempermudah pekerjaan orang."),
-        ("F24", "Ingin tahu bagaimana cara kerja sistem yang digunakan di banyak perusahaan besar."),
-        ("F25", "Senang jika bisa membantu orang dengan mengembangkan solusi berbasis teknologi."),
-        ("F26", "Tertarik untuk mengetahui cara teknologi dapat membuat pekerjaan lebih efisien."),
-        ("F27", "Senang mencari solusi berbasis teknologi untuk masalah bisnis."),
-        ("F28", "Tertarik untuk membantu perusahaan atau organisasi mengelola data mereka dengan lebih baik."),
-        ("F29", "Senang mencari solusi berbasis teknologi untuk masalah bisnis."),
-        ("F30", "Ingin bekerja di bidang yang menggabungkan teknologi dengan kebutuhan bisnis."),
-        ("F31", "Jenjang Pendidikan Diploma-3 (D3)"),
-        ("F32", "Tertarik untuk memimpin proyek yang menggunakan teknologi."),
-        ("F33", "Suka belajar cara menggunakan komputer untuk memecahkan masalah dalam bisnis."),
-        ("F34", "Senang jika bisa membantu organisasi atau perusahaan untuk berkembang dengan teknologi."),
-        ("F35", "Ingin tahu bagaimana cara membuat keputusan bisnis dengan bantuan data dan teknologi."),
-        ("F36", "Tertarik belajar tentang bagaimana perusahaan mengelola informasi dan data mereka."),
-        ("F37", "Senang memikirkan cara teknologi dapat meningkatkan pengalaman pelanggan."),
-        ("F38", "Tertarik untuk belajar cara teknologi bisa meningkatkan cara kerja perusahaan."),
-        ("F39", "Suka membantu orang untuk menggunakan teknologi dengan lebih baik dalam pekerjaan mereka."),
-        ("F40", "Ingin belajar cara memimpin tim yang bekerja dengan teknologi di perusahaan."),
-        ("F41", "Tertarik untuk menggunakan komputer untuk meningkatkan efisiensi bisnis."),
-        ("F42", "Tertarik untuk mempelajari cara mengelola tim yang bekerja dengan teknologi."),
-        ("F43", "Senang bekerja dengan data untuk membuat keputusan yang tepat dalam bisnis."),
-        ("F44", "Ingin belajar bagaimana mengimplementasikan solusi teknologi untuk meningkatkan kinerja perusahaan."),
-        ("F45", "Tertarik untuk merancang dan mengelola proyek yang menggunakan teknologi."),
+        ("F16", "Tertarik untuk mengelola dan mengorganisir informasi di komputer."),
+        ("F17", "Senang bekerja dengan data untuk membantu perusahaan atau organisasi."),
+        ("F18", "Ingin belajar bagaimana teknologi bisa digunakan untuk mempermudah pekerjaan sehari-hari."),
+        ("F19", "Suka membuat website atau aplikasi yang digunakan orang banyak."),
+        ("F20", "Tertarik dengan bagaimana perusahaan menggunakan teknologi untuk menjalankan bisnis."),
+        ("F21", "Senang menganalisis data untuk membantu orang mengambil keputusan penting."),
+        ("F22", "Tertarik untuk belajar cara membuat aplikasi yang mempermudah pekerjaan orang."),
+        ("F23", "Ingin tahu bagaimana cara kerja sistem yang digunakan di banyak perusahaan besar."),
+        ("F24", "Senang jika bisa membantu orang dengan mengembangkan solusi berbasis teknologi."),
+        ("F25", "Tertarik untuk mengetahui cara teknologi dapat membuat pekerjaan lebih efisien."),
+        ("F26", "Senang mencari solusi berbasis teknologi untuk masalah bisnis."),
+        ("F27", "Tertarik untuk membantu perusahaan atau organisasi mengelola data mereka dengan lebih baik."),
+        ("F28", "Senang mencari solusi berbasis teknologi untuk masalah bisnis."),
+        ("F29", "Ingin bekerja di bidang yang menggabungkan teknologi dengan kebutuhan bisnis."),
+        ("F30", "Jenjang Pendidikan Diploma-3 (D3)"),
+        ("F31", "Tertarik untuk memimpin proyek yang menggunakan teknologi."),
+        ("F32", "Suka belajar cara menggunakan komputer untuk memecahkan masalah dalam bisnis."),
+        ("F33", "Senang jika bisa membantu organisasi atau perusahaan untuk berkembang dengan teknologi."),
+        ("F34", "Ingin tahu bagaimana cara membuat keputusan bisnis dengan bantuan data dan teknologi."),
+        ("F35", "Tertarik belajar tentang bagaimana perusahaan mengelola informasi dan data mereka."),
+        ("F36", "Senang memikirkan cara teknologi dapat meningkatkan pengalaman pelanggan."),
+        ("F37", "Tertarik untuk belajar cara teknologi bisa meningkatkan cara kerja perusahaan."),
+        ("F38", "Suka membantu orang untuk menggunakan teknologi dengan lebih baik dalam pekerjaan mereka."),
+        ("F39", "Ingin belajar cara memimpin tim yang bekerja dengan teknologi di perusahaan."),
+        ("F40", "Tertarik untuk menggunakan komputer untuk meningkatkan efisiensi bisnis."),
+        ("F41", "Tertarik untuk mempelajari cara mengelola tim yang bekerja dengan teknologi."),
+        ("F42", "Senang bekerja dengan data untuk membuat keputusan yang tepat dalam bisnis."),
+        ("F43", "Ingin belajar bagaimana mengimplementasikan solusi teknologi untuk meningkatkan kinerja perusahaan."),
+        ("F44", "Tertarik untuk merancang dan mengelola proyek yang menggunakan teknologi."),
     ]
 
     # Cek apakah sudah ada data di tabel kriteria
@@ -95,10 +94,10 @@ def table_aturan():
         (["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15"], "J1"),
         
         # Kriteria untuk J2 (Sistem Informasi)
-        (["F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "F25", "F26", "F27", "F28", "F29", "F30"], "J2"),
+        (["F1", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "F25", "F26", "F27", "F28", "F29"], "J2"),
         
         # Kriteria untuk J3 (Manajemen Informatika)
-        (["F31", "F32", "F33", "F34", "F35", "F36", "F37", "F38", "F39", "F40", "F41", "F42", "F43", "F44", "F45"], "J3"),
+        (["F30", "F31", "F32", "F33", "F34", "F35", "F36", "F37", "F38", "F39", "F40", "F41", "F42", "F43", "F44"], "J3"),
     ]
 
     # Cek apakah tabel aturan sudah ada data
@@ -141,11 +140,12 @@ def table_kategori():
     cursor = conn.cursor()
 
     kategori_list = [
-        ("K1", "Pengembangan Aplikasi dan Pemrograman"),
-        ("K2", "Analisis dan Pemecahan Masalah Komputasi"),
-        ("K3", "Teknologi dan Sistem Komputer"),
-        ("K4", "Manajemen Data dan Sistem Informasi"),
-        ("K5", "Kepemimpinan Teknologi dan Solusi Bisnis"),
+        ("K1", "Jenjang Pendidikan"),
+        ("K2", "Pengembangan Aplikasi dan Pemrograman"),
+        ("K3", "Analisis dan Pemecahan Masalah Komputasi"),
+        ("K4", "Teknologi dan Sistem Komputer"),
+        ("K5", "Manajemen Data dan Sistem Informasi"),
+        ("K6", "Kepemimpinan Teknologi dan Solusi Bisnis"),
     ]
     cursor.execute("SELECT COUNT(*) FROM kategori")
     if cursor.fetchone()[0] == 0:
@@ -199,11 +199,12 @@ def table_kategori_has_pertanyan():
     cursor = conn.cursor()
 
     data = [
-        ("K1", "P1"), ("K1", "P3"), ("K1", "P7"),
-        ("K2", "P2"), ("K2", "P5"), ("K2", "P6"),
-        ("K3", "P4"), ("K3", "P6"), ("K3", "P7"),
-        ("K4", "P8"), ("K4", "P9"), ("K4", "P10"), ("K4", "P11"),
-        ("K5", "P11"), ("K5", "P12"), ("K5", "P13"), ("K5", "P14"),
+        ("K1", "P15"),
+        ("K2", "P1"), ("K2", "P3"),
+        ("K3", "P2"), ("K3", "P5"), ("K3", "P7"),
+        ("K4", "P4"), ("K4", "P6"),
+        ("K5", "P8"), ("K5", "P10"), ("K5", "P14"),
+        ("K6", "P9"), ("K6", "P11"), ("K6", "P12"), ("K6", "P13"),
     ]
 
     cursor.execute("SELECT COUNT(*) FROM kategori_has_pertanyaan")
@@ -230,27 +231,27 @@ def table_pertanyaan_has_kriteria():
 
     # Data relasi kriteria dan pertanyaan (kode_kriteria, kode_pertanyaan)
     kriteria_pertanyaan = [
-        ("F1", "P15"), ("F30", "P15"),
-        ("F2", "P1"), ("F19", "P1"),
-        ("F3", "P2"), ("F10", "P2"),
-        ("F4", "P3"),
-        ("F5", "P4"), ("F12", "P4"),
-        ("F6", "P5"),
-        ("F8", "P6"),
-        ("F13", "P7"), ("F14", "P7"),
-        ("F17", "P8"), ("F21", "P8"),
-        ("F20", "P9"),
-        ("F23", "P10"),
-        ("F26", "P11"), ("F28", "P11"), ("F29", "P11"),
-        ("F31", "P12"), ("F41", "P12"),
-        ("F33", "P13"),
-        ("F25", "P14"), ("F36", "P14"), ("F37", "P14"),
+        ("P1", "F2"), ("P1", "F9"), ("P1", "F19"), ("P1", "F24"),
+        ("P2", "F3"), ("P2", "F22"), ("P2", "F32"),
+        ("P3", "F4"), ("P3", "F23"),
+        ("P4", "F5"), ("P4", "F12"),
+        ("P5", "F6"), ("P5", "F10"),
+        ("P6", "F8"),
+        ("P7", "F13"),
+        ("P8", "F17"), ("P8", "F22"), ("P8", "F34"),
+        ("P9", "F20"), ("P9", "F29"),
+        ("P10", "F23"), ("P10", "F35"),
+        ("P11", "F26"), ("P11", "F28"),
+        ("P12", "F31"), ("P12", "F38"),
+        ("P13", "F27"), ("P13", "F33"),
+        ("P14", "F25"), ("P14", "F36"),
+        ("P15", "F1"), ("P15", "F30"),
     ]
 
     cursor.execute("SELECT COUNT(*) FROM pertanyaan_has_kriteria")
     if cursor.fetchone()[0] == 0:
         # Masukkan data ke dalam pertanyaan_has_kriteria
-        for kode_kriteria, kode_pertanyaan in kriteria_pertanyaan:
+        for kode_pertanyaan, kode_kriteria in kriteria_pertanyaan:
             # Ambil id_kriteria dari tabel kriteria berdasarkan kode_kriteria
             cursor.execute("SELECT id_kriteria FROM kriteria WHERE kode_kriteria = ?", (kode_kriteria,))
             id_kriteria_result = cursor.fetchone()

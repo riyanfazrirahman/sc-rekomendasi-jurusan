@@ -1,6 +1,7 @@
 import streamlit as st
-from models.insert_default import table_kriteria
 from models.kriteria_model import *
+from models.insert_default import table_kriteria
+from pages.component.utils import buat_kode_terbaru
 
 def show():
     # Tampilkan DataFrame Kriteria
@@ -21,9 +22,13 @@ def show():
             st.rerun()  # Refresh 
     with col2:
         if st.button("🗑️ Semua Kriteria", use_container_width=True):
-                delete_all_kriteria()
+            pesan = delete_all_kriteria()
+            if "✅" in pesan:
+                st.success(pesan)
                 st.rerun()  # Refresh
-    
+            else:
+                st.warning(pesan)  # Tampilkan pesan kesalahan
+
     st.markdown("---")
 
     left, right = st.columns(2, gap="large")
@@ -33,20 +38,21 @@ def show():
         nama_kriteria_baru = st.text_input("Nama Kriteria")
 
         left_kode, left_btn1, left_s = st.columns(3)
-        kode_terakhir = ""
         with left_kode:
-            if df_kriteria is not None and not df_kriteria.empty:
-                kode_terakhir = ", ".join(df_kriteria["Kode Kriteria"].iloc[-2:].tolist())  # Ambil 2 terakhir
-            else:
-                kode_terakhir = "-" 
-            kode_kriteria_baru = st.text_input(f"Kode Kriteria: `{kode_terakhir}`")
+            kode_terakhir = ", ".join(df_kriteria["Kode Kriteria"].iloc[-2:].tolist()) if df_kriteria is not None and not df_kriteria.empty else "-"
+            default_kode_baru = buat_kode_terbaru(df_kriteria, kolom="Kode Kriteria")
+
+            kode_kriteria_baru = st.text_input(f"Kode Kriteria: `{kode_terakhir}, ...`", default_kode_baru)
         with left_btn1:
             st.markdown("""<p style="margin-top:1.7rem;"></p>""", unsafe_allow_html=True)
             if st.button("Tambahkan Kriteria",  use_container_width=True):
                 if kode_kriteria_baru and nama_kriteria_baru:
                     pesan = add_kriteria(kode_kriteria_baru, nama_kriteria_baru)
-                    st.success(pesan)
-                    st.rerun()  # Refresh
+                    if "✅" in pesan:
+                        st.success(pesan)
+                        st.rerun()  # Refresh
+                    else:
+                        st.warning(pesan)  # Tampilkan pesan kesalahan
 
     
     with right:
