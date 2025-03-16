@@ -66,28 +66,21 @@ def show():
         st.info("Belum ada aturan yang ditambahkan.")
 
      # Menambahkan jurusan baru
-    row1_col1, row1_col2, row1_col3 = st.columns(3)
+    col1, col2, col3 = st.columns([1, 1, 4])
 
-    with row1_col1:
-        row1_col1_a, row1_col1_b = st.columns(2) 
+    with col1:
+        if st.button("📝 Default Aturan", use_container_width=True):
+            table_aturan()
+            st.rerun()  # Refresh 
+    with col2:
+        # Jika tombol ditekan, simpan perubahan ke database
         if not df_aturan.empty:
-            with row1_col1_a:
-                # Jika tombol ditekan, simpan perubahan ke database
-                if st.button("💾 Simpan Perubahan", use_container_width=True):
-                    for index, row in edited_df.iterrows():
-                        id_aturan = row["id_aturan"]
-                        nama_kriteria_baru = row["nama_kriteria"]
-                        nama_jurusan_baru = row["nama_jurusan"]
-                        update_aturan(id_aturan, nama_kriteria_baru, nama_jurusan_baru)
-                            
-                        st.success("Perubahan berhasil disimpan!")
-                        st.rerun()  # Refresh 
-            with row1_col1_b:
-                if st.button("📝 Default Aturan", use_container_width=True):
-                    table_aturan()
-                    st.rerun()  # Refresh 
-        else:
-            with row1_col1_a:
-                if st.button("📝 Default Aturan", use_container_width=True):
-                    table_aturan()
+            if st.button("💾 Simpan Perubahan", use_container_width=True):
+                for index, row in edited_df.iterrows():
+                    id_aturan = row["id_aturan"]
+                    nama_kriteria_baru = row["nama_kriteria"]
+                    nama_jurusan_baru = row["nama_jurusan"]
+                    update_aturan(id_aturan, nama_kriteria_baru, nama_jurusan_baru)
+                        
+                    st.success("Perubahan berhasil disimpan!")
                     st.rerun()  # Refresh 

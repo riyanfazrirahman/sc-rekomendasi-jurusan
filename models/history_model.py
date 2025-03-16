@@ -3,7 +3,7 @@ import json
 import uuid
 from datetime import datetime
 
-def simpan_jawaban(jawaban_user):
+def simpan_jawaban(jawaban_user, user_id):
     conn = sqlite3.connect("rekomendasi.db")
     cursor = conn.cursor()
 
@@ -28,13 +28,13 @@ def simpan_jawaban(jawaban_user):
     if hasil:
         conn.close()
         return hasil[0]  # Jika sudah ada, gunakan kode lama
-
+    
     # Format kode unik lebih panjang
     kode_unik = str(uuid.uuid4())  # Full UUID (36 karakter dengan tanda -)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    cursor.execute("INSERT INTO riwayat_jawaban (kode, jawaban, timestamp) VALUES (?, ?, ?)",
-                   (kode_unik, jawaban_json, timestamp))
+    cursor.execute("INSERT INTO riwayat_jawaban (user_id, kode, jawaban, timestamp) VALUES (?, ?, ?, ?)",
+                   (user_id, kode_unik, jawaban_json, timestamp))
 
     conn.commit()
     conn.close()
@@ -47,7 +47,29 @@ def get_all_history_jawaban():
     cursor = conn.cursor()
     
     # Pastikan hanya mengambil 'kode' dan 'timestamp'
-    cursor.execute("SELECT kode, timestamp FROM riwayat_jawaban ORDER BY timestamp DESC")
+    cursor.execute("""
+        SELECT COALESCE(u.username, 'Unknown User'), r.kode, r.timestamp 
+        FROM riwayat_jawaban r
+        LEFT JOIN users u ON r.user_id = u.id_user
+        ORDER BY r.timestamp DESC
+    """)
+    hasil = cursor.fetchall()
+    
+    conn.close()
+    return hasil
+
+def get_by_id_user_history_jawaban(user_id):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+
+    # User biasa hanya bisa melihat riwayat miliknya sendiri
+    cursor.execute("""
+        SELECT COALESCE(u.username, 'Unknown User'), r.kode, r.timestamp 
+        FROM riwayat_jawaban r
+        LEFT JOIN users u ON r.user_id = u.id_user
+        WHERE user_id = ? ORDER BY timestamp DESC
+    """, (user_id,))
+    
     hasil = cursor.fetchall()
     
     conn.close()

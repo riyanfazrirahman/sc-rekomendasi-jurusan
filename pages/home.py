@@ -8,13 +8,14 @@ from pages.component.chart_tree import generate_tree
 st.title( f"🎓Sistem Rekomendasi Jurusan Kuliah STMIK Palangkaraya" )
 st.markdown("---")
 
-
 # Inisialisasi tempat simpan jawaban di session_state
 if "jawaban_user" not in st.session_state:
     st.session_state["jawaban_user"] = {}
 
 if "kategori_index" not in st.session_state:
     st.session_state["kategori_index"] = 0
+
+user_id = st.session_state.get("user_id", None)  # Ambil ID jika login
 
 data = format_pertanyaan_kriteria()
 
@@ -36,14 +37,16 @@ def tampilkan_form():
 
     kategori_list = list(kategori_dict.keys())
     selected_kategori = kategori_list[st.session_state["kategori_index"]]
-    st.markdown(f"📌 {selected_kategori}", unsafe_allow_html=True)
+    st.header(f"📌 {selected_kategori}")
+    st.markdown(f"<p style='text-align: center; margin-top: 1rem; '></p>",unsafe_allow_html=True)
 
     with st.container(border=True):
         pertanyaan_dict = kategori_dict[selected_kategori]
         for pertanyaan, info in pertanyaan_dict.items():
-            st.subheader(f"🔹 {pertanyaan}")
+            st.subheader(f"{pertanyaan}")
 
-            col_left, col_center, col_end = st.columns([0.5, 10, 0.1])
+            col_left, col_center, col_end = st.columns([0.2, 10, 0.1])
+            st.markdown("---")
             with col_center:
                 with st.container():
                     if info["jenis"] == "multiple":
@@ -61,12 +64,7 @@ def tampilkan_form():
                                 if kode_kriteria in selected_options:
                                     selected_options.remove(kode_kriteria)
                         st.session_state["jawaban_user"][pertanyaan] = selected_options
-                    
-                        st.markdown("---")
-                        st.markdown(
-                            f"<p style='text-align: center; margin: 0;padding-buttom:20px '></p>",
-                            unsafe_allow_html=True
-                        )
+                        st.markdown(f"<p style='text-align: center; margin-top: 1rem; '></p>",unsafe_allow_html=True)
 
                     else:
                         options_dict = {info["kriteria"][i]: info["kode_kriteria"][i] for i in range(len(info["kriteria"]))}
@@ -79,17 +77,11 @@ def tampilkan_form():
                             key=f"{selected_kategori}_{pertanyaan}"
                         )
                         st.session_state["jawaban_user"][pertanyaan] = options_dict.get(selected_label, None)
+                        st.markdown(f"<p style='text-align: center; margin-top: 1rem; '></p>",unsafe_allow_html=True)
 
-                        st.markdown("---")
-                        st.markdown(
-                            f"<p style='text-align: center; margin: 0;padding-buttom:20px '></p>",
-                            unsafe_allow_html=True
-                        )
         
-    st.markdown(
-        f"<p style='text-align: center; padding-top: 2rem '></p>",
-        unsafe_allow_html=True
-    )
+    st.markdown(f"<p style='text-align: center; margin-top: 2rem; '></p>",unsafe_allow_html=True)
+
     # Navigasi kategori
     col1, col2, col3, col4, col5 = st.columns([1, 1, 2,4, 1])
     with col1:
@@ -132,7 +124,9 @@ def tampilkan_form():
                         kriteria_user.append(jawaban)
 
                 if kriteria_user:
-                    kode_unik = simpan_jawaban(st.session_state["jawaban_user"])
+                    kode_unik = simpan_jawaban(st.session_state["jawaban_user"], user_id)
+                    print(f"🔍 DEBUG user_id: {user_id}")
+
                     success_massage = f"✅ Jawaban berhasil disimpan dengan kode: `{kode_unik}`"
                     # Konversi jawaban_user ke data_riwayat (list kode kriteria)
                     data_riwayat = kriteria_user  # Pastikan kriteria_user berupa list kode kriteria
@@ -164,11 +158,7 @@ def tampilkan_form():
 
     current_page = st.session_state["kategori_index"] + 1
     total_pages = len(kategori_list)
-    st.markdown(
-        f"<p style='text-align: center; margin: 0;padding-top: 100px'>Halaman {current_page} dari {total_pages}</p>",
-        unsafe_allow_html=True
-    )
-
+    st.markdown(f"""<p style='text-align: center; margin-top: 3rem;'>Halaman {current_page} dari {total_pages}</p>""", unsafe_allow_html=True)
 
 if "jawaban_user" not in st.session_state or not isinstance(st.session_state["jawaban_user"], dict):
     st.session_state["jawaban_user"] = {}

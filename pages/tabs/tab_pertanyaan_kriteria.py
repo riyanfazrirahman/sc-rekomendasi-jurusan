@@ -14,9 +14,11 @@ def show():
         hide_index=True
     )
 
-    if st.button("📝 Default Pertanyaan Kriteria ", use_container_width=True):
-        table_pertanyaan_has_kriteria()
-        st.rerun()  # Refresh
+    col1, col2, col3 = st.columns([1.2, 0.8, 4])
+    with col1:
+        if st.button("📝 Default Pertanyaan Kriteria", use_container_width=True):
+            table_pertanyaan_has_kriteria()
+            st.rerun()  # Refresh
 
 
 

@@ -14,33 +14,36 @@ def show():
     )
     
     # Menambahkan jurusan baru
-    row1_col1, row1_col2, row1_col3 = st.columns(3)
-    with row1_col1:
-        row1_col1_a, row1_col1_b = st.columns(2) 
-        with row1_col1_a:
-            if st.button("📝 Default Jurusan", use_container_width=True):
-                table_jurusan()
-                st.rerun()  # Refresh 
-        with row1_col1_b:
-            if st.button("🗑️ Semua Jurusan", use_container_width=True):
+    col1, col2, col3 = st.columns([1, 1, 4])
+    with col1:
+        if st.button("📝 Default Jurusan", use_container_width=True):
+            table_jurusan()
+            st.rerun()  # Refresh 
+    with col2:
+        if st.button("🗑️ Semua Jurusan", use_container_width=True):
+            if st.confirm("Apakah Anda yakin ingin menghapus SEMUA jurusan?", key="confirm_delete_all"):
                 delete_all_jurusan()
-                st.rerun()  # Refresh
+                st.success("✅ Semua jurusan berhasil dihapus!")
+                st.rerun()
     
     st.markdown("---")
 
-    row2_col1, row2_col2 = st.columns(2, gap="large")
-    with row2_col1:
+    left, right = st.columns(2, gap="large")
+    with left:
         # Menambahkan jurusan baru
         st.header("🏷️ Tambah Jurusan")
+        nama_jurusan_baru = st.text_input("Nama Jurusan")
 
-        row2_col1_a, row2_col1_b = st.columns(2)
-        with row2_col1_a:
-            kode_jurusan_baru = st.text_input("Kode Jurusan")
-        with row2_col1_b:
-            nama_jurusan_baru = st.text_input("Nama Jurusan")
-        
-        row2_col1_row1_col1, row2_col1_row1_col2, row2_col1_row1_col3 = st.columns(3)
-        with row2_col1_row1_col1:
+        left_kode, left_btn1, left_s = st.columns(3)
+        kode_terakhir = ""
+        with left_kode:
+            if df_jurusan is not None and not df_jurusan.empty:
+                kode_terakhir = ", ".join(df_jurusan["Kode Jurusan"].iloc[-2:].tolist())  # Ambil 2 terakhir
+            else:
+                kode_terakhir = "-" 
+            kode_jurusan_baru = st.text_input(f"Kode Jurusan: `{kode_terakhir}`")
+        with left_btn1:
+            st.markdown("""<p style="margin-top:1.7rem;"></p>""", unsafe_allow_html=True)
             if st.button("Tambahkan Jurusan",  use_container_width=True):
                 if kode_jurusan_baru and nama_jurusan_baru:
                     pesan = add_jurusan(kode_jurusan_baru, nama_jurusan_baru)
@@ -48,15 +51,16 @@ def show():
                     st.rerun()  # Refresh
 
     
-    with row2_col2:
+    with right:
         # Menghapus jurusan 
         st.header("🗑️ Hapus jurusan")
 
         jurusan_list = get_kode_jurusan()
         jurusan_selected = st.multiselect("Pilih kode jurusan yang akan hapus:", jurusan_list)
 
-        row2_col2_row2_col1, row2_col2_row2_col2, row2_col2_row2_col3, = st.columns(3)
-        with row2_col2_row2_col1:
+        right_btn1, right_btn2, = st.columns([1, 2])
+        with right_btn1:
+            st.markdown("""<p style="margin-top:1.7rem;"></p>""", unsafe_allow_html=True)
             if st.button("Hapus Jurusan",  use_container_width=True):
                 if jurusan_selected:
                     for kode_jurusan in jurusan_selected:

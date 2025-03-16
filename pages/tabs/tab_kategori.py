@@ -12,9 +12,11 @@ def show():
         use_container_width=True, 
         hide_index=True
     )
-        
-    if st.button("📝 Default Kategori", use_container_width=True):
-        table_kategori()
-        st.rerun()  # Refresh 
-  
+    
+    col1, col2, col3 = st.columns([1, 1, 4])
+    with col1:
+        if st.button("📝 Default Kategori", use_container_width=True):
+            table_kategori()
+            st.rerun()  # Refresh 
+    
    

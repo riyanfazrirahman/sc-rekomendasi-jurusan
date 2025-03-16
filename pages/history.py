@@ -1,6 +1,7 @@
 import streamlit as st
-from models.history_model import ambil_jawaban_by_kode, get_all_history_jawaban, hapus_jawaban_by_kode
+from models.history_model import ambil_jawaban_by_kode, get_all_history_jawaban,get_by_id_user_history_jawaban, hapus_jawaban_by_kode
 from models.rekomendasi_model import get_recommendation
+from models.auth_model import get_user
 from pages.component.chart_tree import generate_tree
 
 st.markdown("## 📜 Riwayat Jawaban")
@@ -9,13 +10,21 @@ st.markdown("---")
 col_s, col_e = st.columns([1, 3])
 with col_e:
     # Ambil semua riwayat jawaban dari database
-    riwayat_list = get_all_history_jawaban()
+    if st.session_state.get("logged_in"):
+        user_id = st.session_state.get("user_id")
+        role = st.session_state.get("role")
+
+    if role == "admin":
+        riwayat_list = get_all_history_jawaban()
+    else:
+        riwayat_list = get_by_id_user_history_jawaban(user_id)
+        
 
     # Input pencarian
     search_query = st.text_input("🔍 Cari berdasarkan Kode:", "").strip().lower()
 
     # Filter hasil berdasarkan pencarian
-    filtered_list = [item for item in riwayat_list if search_query in item[0].lower()] if search_query else riwayat_list
+    filtered_list = [item for item in riwayat_list if search_query in item[1].lower()] if search_query else riwayat_list
 
     # Konfigurasi Pagination
     ITEMS_PER_PAGE = 5  # Jumlah item per halaman
@@ -34,9 +43,9 @@ with col_e:
         st.info("Tidak ada riwayat yang ditemukan.")
     else:
         # Menampilkan riwayat dengan pagination
-        for kode, timestamp in filtered_list[start_idx:end_idx]:
+        for username, kode, timestamp in filtered_list[start_idx:end_idx]:
             with st.container(border=True):
-                col1, col2, col3 = st.columns([3, 3, 1])
+                col1, col2, col3, col4 = st.columns([4.5,2.5,3,2])
 
                 with col1:
                     if st.button(f"🆔 **{kode}**", key=f"lihat_{kode}", use_container_width=True):
@@ -57,9 +66,11 @@ with col_e:
                             else:
                                 massage = "⚠️ Tidak ada rekomendasi yang sesuai."
 
-                col2.button(f"📅 {timestamp}", disabled=True)
+                col2.button(f"📅 {timestamp}", key=f"timestamp_{kode}", disabled=True, use_container_width=True)
 
-                with col3:
+                col3.button(f"🙉 {username}", key=f"user_{kode}", disabled=True, use_container_width=True)
+
+                with col4:
                     if st.button("🗑️ Hapus", key=f"hapus_{kode}", use_container_width=True):
                         hapus_jawaban_by_kode(kode)
                         st.success(f"✅ Riwayat dengan kode `{kode}` berhasil dihapus.")

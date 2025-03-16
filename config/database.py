@@ -83,23 +83,18 @@ def init_db():
         FOREIGN KEY (id_kriteria) REFERENCES kriteria(id) ON DELETE CASCADE
     );
     """)
-
-    
-    # Untuk Delet Tabel
-    # cursor.execute("""
-    # DROP TABLE riwayat_jawaban;
-    # """)
     
     # Buat tabel untuk menyimpan jawaban user
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS riwayat_jawaban (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NULL,  -- Bisa NULL kalau user tidak login
         kode TEXT UNIQUE,
         jawaban TEXT,
-        timestamp TEXT
+        timestamp TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
     );
     """)
-
     
     # Tambahkan akun admin default jika belum ada
     cursor.execute("SELECT * FROM users WHERE username = 'admin'")
@@ -108,3 +103,23 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+def delete_db_table(nama_table):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+
+    # Untuk Delet Tabel
+    cursor.execute(f"""
+    DROP TABLE {nama_table};
+    """)
+
+    conn.commit()
+    conn.close()
+
+def get_table_names():
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_sequence;")
+    tables = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return tables

@@ -13,9 +13,11 @@ def show():
         hide_index=True
     )
         
-    if st.button("📝 Default Kategori Pertanyaan", use_container_width=True):
-        table_kategori_has_pertanyan()
-        st.rerun()  # Refresh 
-        
+    col1, col2, col3 = st.columns([1.2, 0.8, 4])
+    with col1:
+        if st.button(f"📝 Default \nKategori Pertanyaan", use_container_width=True):
+            table_kategori_has_pertanyan()
+            st.rerun()  # Refresh 
+            
   
    
