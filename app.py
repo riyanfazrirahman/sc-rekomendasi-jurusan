@@ -30,7 +30,6 @@ dashboard = st.Page("pages/dashboard.py", title="Dashboard", icon="📊", defaul
 tabel_rekomendasi = st.Page("pages/tabel_rekomendasi.py", title="Tabel Rekomendasi", icon="📂")
 tabel_pertanyaan = st.Page("pages/tabel_pertanyaan.py", title="Tabel Pertanyaan", icon="📂")
 history = st.Page("pages/history.py", title="Riwayat", icon="📜")
-tree = st.Page("pages/tree.py", title="Tree", icon="🌳")
 setting = st.Page("pages/setting.py", title="Setting", icon="⚙️")
 login_page = st.Page("pages/auth.py", title="Log in", icon=":material/login:")
 logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
