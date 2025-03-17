@@ -84,6 +84,16 @@ def add_pertanyaan(kode_pertanyaan_baru, pertanyaan_baru, jenis_pertanyaan_selec
     conn.close()
     return "✅ Pertanyaan berhasil ditambahkan."
 
+# Edit jenis
+def update_jenis_pertanyaan(id_pertanyaan, new_jenis):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE pertanyaan SET jenis_pertanyaan = ? WHERE id_pertanyaan = ?
+    """, (new_jenis, id_pertanyaan))
+    conn.commit()
+    conn.close()
+
 # Hapus semua pertanyaan
 def delete_all_pertanyaan():
     conn = sqlite3.connect("rekomendasi.db")

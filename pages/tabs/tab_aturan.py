@@ -39,7 +39,7 @@ def show():
             hide_index=True,  # Sembunyikan index default Pandas
         )
 
-        # **🔍 DETEKSI INSERT (Baris yang baru ditambahkan)**
+        # DETEKSI INSERT (Baris yang baru ditambahkan)
         new_rows = edited_df[edited_df["id_aturan"].isna()]
 
         if not new_rows.empty:
@@ -51,10 +51,10 @@ def show():
 
       
         
-        # 🔥 **Deteksi baris yang dihapus**
+        # Deteksi baris yang dihapus
         deleted_rows = df_aturan[~df_aturan["id_aturan"].isin(edited_df["id_aturan"])]
 
-        # **Jika ada yang dihapus, hapus dari database**
+        # Jika ada yang dihapus, hapus dari database
         if not deleted_rows.empty:
             for id_aturan in deleted_rows["id_aturan"]:
                 delete_aturan(id_aturan)

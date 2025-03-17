@@ -1,5 +1,10 @@
+import streamlit as st
 import sqlite3
+import pandas as pd
+import graphviz
 from collections import Counter
+from models.rekomendasi_model import get_recommendation
+from pages.component.chart_tree import generate_tree 
 
 def get_recommendation(kriteria_user):
     
@@ -47,3 +52,16 @@ def get_recommendation(kriteria_user):
     # Hasil Akhir: Rekomendasi Jurusan
     return probabilitas
 
+
+data_riwayat = None
+# Generate dan tampilkan pohon keputusan
+st.markdown("### 🌳 Pohon Keputusan")
+dot = generate_tree(data_riwayat)
+st.graphviz_chart(dot)
+
+hasil_rekomendasi = get_recommendation()
+for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
+# Tampilkan hasil rekomendasi
+st.markdown("### 📊 Hasil Rekomendasi")
+st.progress(persen / 100)
+st.write(f"**{jurusan}: {persen:.2f}%**")

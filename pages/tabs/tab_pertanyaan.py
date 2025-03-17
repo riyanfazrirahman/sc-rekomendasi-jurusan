@@ -8,12 +8,28 @@ def show():
     st.header("📌 Daftar Pertanyaan")
 
     df_pertanyaan = get_all_pertanyaan()
-    st.dataframe(
-        df_pertanyaan, 
-        use_container_width=True, 
-        hide_index=True
-    )
-    
+
+    if not df_pertanyaan.empty:
+        edited_df = st.data_editor(
+            df_pertanyaan,
+            num_rows="dynamic",
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Jenis Pertanyaan": st.column_config.SelectboxColumn(
+                    "Jenis Pertanyaan", options=["single", "multiple"]
+                )
+            }
+        )
+        
+        # Perbarui database jika ada perubahan
+        for index, row in edited_df.iterrows():
+            if row["Jenis Pertanyaan"] != df_pertanyaan.at[index, "Jenis Pertanyaan"]:
+                update_jenis_pertanyaan(row["ID"], row["Jenis Pertanyaan"])
+
+    else:
+        st.warning("Tidak ada pertanyaan yang tersedia.")
+            
     # Menambahkan Pertanyaan baru
     col1, col2, col3 = st.columns([1, 1, 4])
     with col1:

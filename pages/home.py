@@ -143,19 +143,22 @@ def tampilkan_form():
         st.success(success_massage)
     if warning_massage:
         st.warning(warning_massage)
-
-    # Tampilkan hasil rekomendasi di luar kolom tombol (di luar `col3`)
+    
+    # Tampilkan hasil (di luar `col3`)
     if hasil_rekomendasi:
-        st.markdown("### 📊 Hasil Rekomendasi")
-        for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
-            st.progress(persen / 100)
-            st.write(f"**{jurusan}: {persen:.2f}%**")
-        
-        # Generate dan tampilkan pohon keputusan
-        st.markdown("### 🌳 Pohon Keputusan")
-        dot = generate_tree(data_riwayat)
-        st.graphviz_chart(dot)
-
+        left, right = st.columns([1, 2])
+        with left:
+            # Generate dan tampilkan pohon keputusan
+            st.markdown("### 🌳 Pohon Keputusan")
+            dot = generate_tree(data_riwayat)
+            st.graphviz_chart(dot)
+        with right:
+            # Tampilkan hasil rekomendasi
+            st.markdown("### 📊 Hasil Rekomendasi")
+            for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
+                st.progress(persen / 100)
+                st.write(f"**{jurusan}: {persen:.2f}%**")
+    
     current_page = st.session_state["kategori_index"] + 1
     total_pages = len(kategori_list)
     st.markdown(f"""<p style='text-align: center; margin-top: 3rem;'>Halaman {current_page} dari {total_pages}</p>""", unsafe_allow_html=True)
