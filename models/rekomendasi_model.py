@@ -75,3 +75,25 @@ def get_recommendation(kriteria_user):
 
     conn.close()
     return probabilitas
+
+
+def get_summary_counts():
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    
+    tables = {
+        "Jurusan": "jurusan",
+        "Kriteria": "kriteria",
+        "Pertanyaan": "pertanyaan",
+        "Kategori": "kategori",
+        "User": "users",
+        "Histori": "riwayat_jawaban"
+    }
+    
+    counts = {}
+    for key, table in tables.items():
+        cursor.execute(f"SELECT COUNT(*) FROM {table}")
+        counts[key] = cursor.fetchone()[0]
+    
+    conn.close()
+    return counts

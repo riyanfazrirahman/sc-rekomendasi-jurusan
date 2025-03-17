@@ -2,19 +2,6 @@ import streamlit as st
 import graphviz
 from models.aturan_model import get_all_aturan
 
-def show():
-    # Halaman Chart Tree 
-    st.title("Pohon Keputusan Rekomendasi Jurusan")
-
-    # Contoh data riwayat
-    data_riwayat = ["F2", "F19", "F4", "F14", "F3", "F8", None, None, None, "F28", None, "F36"]
-
-    # Generate pohon
-    dot = generate_tree(data_riwayat)
-
-    # Tampilkan pohon (misalnya di Streamlit)
-    st.graphviz_chart(dot)
-
 def generate_tree(data_riwayat):
     dot = graphviz.Digraph()
 

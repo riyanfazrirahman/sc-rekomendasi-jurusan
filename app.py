@@ -25,7 +25,7 @@ st.set_page_config(
 )
 
 home_page = st.Page("pages/home.py", title="Home", icon="🏠", default=True)
-home_page_admin = st.Page("pages/home.py", title="Home", icon="🏠")
+form_rekomendasi = st.Page("pages/form_rekomendasi.py", title="Form Rekomendasi", icon="📝")
 dashboard = st.Page("pages/dashboard.py", title="Dashboard", icon="📊", default=True)
 tabel_rekomendasi = st.Page("pages/tabel_rekomendasi.py", title="Tabel Rekomendasi", icon="📂")
 tabel_pertanyaan = st.Page("pages/tabel_pertanyaan.py", title="Tabel Pertanyaan", icon="📂")
@@ -36,15 +36,16 @@ login_page = st.Page("pages/auth.py", title="Log in", icon=":material/login:")
 logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
 
 if st.session_state.logged_in:
+    username_display = f"Selamat Datang, 👤 {st.session_state.username}"
     if st.session_state.role == "admin":
         pg = st.navigation(
             {
-                "Account": [
+                username_display: [
                     logout_page,
                     setting,
                 ],
                 "Menu": [
-                    home_page_admin, 
+                    form_rekomendasi, 
                     dashboard,
                 ],
                 "Data": [
@@ -57,9 +58,10 @@ if st.session_state.logged_in:
     elif st.session_state.role == "user":
         pg = st.navigation(
             {
-                "Account": [logout_page],
+                username_display: [logout_page],
                 "Menu": [
                     home_page,
+                    form_rekomendasi,
                     history
                 ],
             }
@@ -67,10 +69,11 @@ if st.session_state.logged_in:
 else:
     pg = st.navigation([
         login_page,
-        # setting, 
         home_page, 
+        form_rekomendasi
         # tabel_rekomendasi,
         # tabel_pertanyaan,
         # history
+        # setting, 
     ])
 pg.run()
