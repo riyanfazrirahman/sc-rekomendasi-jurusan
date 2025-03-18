@@ -17,7 +17,7 @@ def get_kategori_has_pertanyaan():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT k.kode_kategori, k.nama_kategori, p.kode_pertanyaan, p.pertanyaan
+        SELECT id_kategori_pertanyaan, k.kode_kategori, k.nama_kategori, p.kode_pertanyaan, p.pertanyaan
         FROM kategori_has_pertanyaan khp
         JOIN kategori k ON khp.id_kategori = k.id_kategori
         JOIN pertanyaan p ON khp.id_pertanyaan = p.id_pertanyaan
@@ -26,7 +26,7 @@ def get_kategori_has_pertanyaan():
     data = cursor.fetchall()
     conn.close()
 
-    df = pd.DataFrame(data, columns=["Kode Kategori", "Nama Kategori", "Kode Pertanyaan", "Pertanyaaan"])
+    df = pd.DataFrame(data, columns=["ID", "Kode Kategori", "Nama Kategori", "Kode Pertanyaan", "Pertanyaaan"])
     return df
 
 # Tamabah data kategori
@@ -48,6 +48,36 @@ def add_kategori(kode_kategori_baru, kategori_baru):
     conn.commit()
     conn.close()
     return "✅ Kategori berhasil ditambahkan."
+
+def add_kategori_pertanyaan(kode_kategori, pertanyaan_list):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    
+    # Dapatkan id_kategori dari database
+    cursor.execute("SELECT id_kategori FROM kategori WHERE kode_kategori = ?", (kode_kategori,))
+    id_kategori = cursor.fetchone()
+
+    if not id_kategori:
+        conn.close()
+        return "⚠️ kategori tidak ditemukan!"
+    
+    id_kategori = id_kategori[0]  # Ambil nilai ID dari tuple
+
+    # Simpan relasi kategori-pertanyaan satu per satu
+    for pertanyaan in pertanyaan_list:
+        cursor.execute("SELECT id_pertanyaan FROM pertanyaan WHERE kode_pertanyaan = ?", (pertanyaan,))
+        id_pertanyaan = cursor.fetchone()
+
+        if id_pertanyaan:
+            id_pertanyaan = id_pertanyaan[0]
+            cursor.execute("INSERT INTO kategori_has_pertanyaan (id_kategori, id_pertanyaan) VALUES (?, ?)", 
+                           (id_kategori, id_pertanyaan))
+    
+    conn.commit()
+    conn.close()
+    
+    return "✅ Kategori-Pertanyaan berhasil ditambahkan!"
+
 
 def get_kode_kategori():
     conn = sqlite3.connect("rekomendasi.db")
@@ -110,3 +140,20 @@ def delete_kategori_by_kode(kode_kategori):
 
     conn.close()
     return pesan
+
+
+def delete_kategori_pertanyaan_by_id(id_list):
+    if not id_list:
+        return "⚠️ Tidak ada ID yang dipilih."
+
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+
+    # Menghapus banyak data sekaligus dengan `IN`
+    query = f"DELETE FROM kategori_has_pertanyaan WHERE id_kategori_pertanyaan IN ({','.join(['?'] * len(id_list))})"
+    cursor.execute(query, id_list)
+
+    conn.commit()
+    conn.close()
+
+    return "✅ Kategori berhasil dihapus!"

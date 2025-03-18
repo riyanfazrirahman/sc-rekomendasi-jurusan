@@ -22,7 +22,7 @@ def get_pertanyaan_has_kriteria():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT p.kode_pertanyaan, p.pertanyaan, k.kode_kriteria, k.nama_kriteria
+        SELECT id_pertanyaan_kriteria, p.kode_pertanyaan, p.pertanyaan, k.kode_kriteria, k.nama_kriteria
         FROM pertanyaan_has_kriteria khp
         JOIN pertanyaan p ON khp.id_pertanyaan = p.id_pertanyaan
         JOIN kriteria k ON khp.id_kriteria = k.id_kriteria
@@ -30,7 +30,7 @@ def get_pertanyaan_has_kriteria():
 
     data = cursor.fetchall()
     conn.close()
-    df = pd.DataFrame(data,  columns=[ "Kode Pertanyaan", "Pertanyaaan", "Kode Kriteria", "Kriteria"])
+    df = pd.DataFrame(data,  columns=["ID", "Kode Pertanyaan", "Pertanyaaan", "Kode Kriteria", "Kriteria"])
     return df
 
 # Mengambil data kategori, pertanyaan, dan kriterianya dari database
@@ -83,6 +83,35 @@ def add_pertanyaan(kode_pertanyaan_baru, pertanyaan_baru, jenis_pertanyaan_selec
     conn.commit()
     conn.close()
     return "✅ Pertanyaan berhasil ditambahkan."
+
+def add_pertanyaan_kriteria(pertanyaan, kriteria_list):
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+    
+    # Dapatkan id_pertanyaan dari database
+    cursor.execute("SELECT id_pertanyaan FROM pertanyaan WHERE kode_pertanyaan = ?", (pertanyaan,))
+    id_pertanyaan = cursor.fetchone()
+
+    if not id_pertanyaan:
+        conn.close()
+        return "⚠️ Pertanyaan tidak ditemukan!"
+    
+    id_pertanyaan = id_pertanyaan[0]  # Ambil nilai ID dari tuple
+
+    # Simpan relasi pertanyaan-kriteria satu per satu
+    for kriteria in kriteria_list:
+        cursor.execute("SELECT id_kriteria FROM kriteria WHERE kode_kriteria = ?", (kriteria,))
+        id_kriteria = cursor.fetchone()
+
+        if id_kriteria:
+            id_kriteria = id_kriteria[0]
+            cursor.execute("INSERT INTO pertanyaan_has_kriteria (id_pertanyaan, id_kriteria) VALUES (?, ?)", 
+                           (id_pertanyaan, id_kriteria))
+    
+    conn.commit()
+    conn.close()
+    
+    return "✅ Aturan pertanyaan-kriteria berhasil ditambahkan!"
 
 # Edit jenis
 def update_jenis_pertanyaan(id_pertanyaan, new_jenis):
@@ -141,3 +170,19 @@ def delete_pertanyaan_by_kode(kode_pertanyaan):
 
     conn.close()
     return pesan
+
+def delete_pertanyaan_kriteria_by_id(id_list):
+    if not id_list:
+        return "⚠️ Tidak ada ID yang dipilih."
+
+    conn = sqlite3.connect("rekomendasi.db")
+    cursor = conn.cursor()
+
+    # Menghapus banyak data sekaligus dengan `IN`
+    query = f"DELETE FROM pertanyaan_has_kriteria WHERE id_pertanyaan_kriteria IN ({','.join(['?'] * len(id_list))})"
+    cursor.execute(query, id_list)
+
+    conn.commit()
+    conn.close()
+
+    return "✅ Kategori berhasil dihapus!"

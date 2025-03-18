@@ -1,4 +1,5 @@
 import sqlite3
+from models.auth_model import hash_password
 
 def init_db():
     conn = sqlite3.connect("rekomendasi.db")
@@ -42,6 +43,7 @@ def init_db():
         role TEXT CHECK(role IN ('admin', 'user'))
     )
     """)
+    # delete_db_table("users")
 
     # Tabel Kategori 
     cursor.execute("""
@@ -99,7 +101,9 @@ def init_db():
     # Tambahkan akun admin default jika belum ada
     cursor.execute("SELECT * FROM users WHERE username = 'admin'")
     if not cursor.fetchone():
-        cursor.execute("INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'admin')")
+        # hashed_admin_pass = "admin123"
+        hashed_admin_pass = hash_password("admin123")
+        cursor.execute("INSERT INTO users (username, password, role) VALUES ('admin', ?, 'admin')", (hashed_admin_pass,))
 
     conn.commit()
     conn.close()

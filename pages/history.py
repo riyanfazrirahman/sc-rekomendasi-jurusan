@@ -1,7 +1,13 @@
 import streamlit as st
-from models.history_model import ambil_jawaban_by_kode, get_all_history_jawaban,get_by_id_user_history_jawaban, hapus_jawaban_by_kode
+from models.history_model import (
+    ambil_jawaban_by_kode, 
+    get_all_history_jawaban,
+    get_by_id_user_history_jawaban, 
+    hapus_jawaban_by_kode,
+    update_user_id_dari_kode,
+    ambil_user_id_dari_kode
+)
 from models.rekomendasi_model import get_recommendation
-from models.auth_model import get_user
 from pages.component.chart_tree import generate_tree
 
 st.markdown("## 📜 Riwayat Jawaban")
@@ -20,10 +26,40 @@ with col_e:
     else:
         riwayat_list = get_by_id_user_history_jawaban(user_id)
         
+    col5, col6, col7 = st.columns([2,2,1])
+    with col5:
+        # Input pencarian
+        search_query = st.text_input("🔍 Cari berdasarkan Kode:", "").strip().lower()
+    with col6:
+        # Input kode riwayat
+        kode_unik_input = st.text_input("Masukkan Kode Unik")
 
-    # Input pencarian
-    search_query = st.text_input("🔍 Cari berdasarkan Kode:", "").strip().lower()
+    berhasil = None 
+    pesan = ""
+    with col7:
+        # Beri jarak agar tombol tidak terlalu dekat
+        st.markdown("""<p style="margin-top:1.7rem;"></p>""", unsafe_allow_html=True)
 
+        if st.button("🔄 Gunakan Kode Ini", use_container_width=True):
+            if kode_unik_input:  
+                berhasil = update_user_id_dari_kode(kode_unik_input, user_id)
+
+                if berhasil:
+                    pesan = "✅ Data berhasil diperbarui dengan akun Anda!"
+                    st.session_state["user_id"] = ambil_user_id_dari_kode(kode_unik_input)
+                    st.rerun()  # Refresh UI setelah update
+                else:
+                    pesan = "❌ Kode tidak ditemukan atau sudah digunakan!"
+            else:
+                pesan = "⚠️ Masukkan kode unik terlebih dahulu!"
+
+    # Tampilkan pesan di luar col7
+    if pesan:
+        if berhasil:
+            st.success(pesan)
+        else:
+            st.error(pesan)
+    
     # Filter hasil berdasarkan pencarian
     filtered_list = [item for item in riwayat_list if search_query in item[1].lower()] if search_query else riwayat_list
 

@@ -1,7 +1,7 @@
 import streamlit as st
 from models.insert_default import table_aturan
-from models.kriteria_model import get_options_kriteria
-from models.jurusan_model import get_options_jurusan
+from models.kriteria_model import get_options_kriteria, get_kode_kriteria
+from models.jurusan_model import get_options_jurusan, get_kode_jurusan
 from models.aturan_model import *
 
 def show():
@@ -49,8 +49,6 @@ def show():
             st.success("Aturan baru berhasil ditambahkan!")
             st.rerun()  # Refresh 
 
-      
-        
         # Deteksi baris yang dihapus
         deleted_rows = df_aturan[~df_aturan["id_aturan"].isin(edited_df["id_aturan"])]
 
@@ -84,3 +82,34 @@ def show():
                         
                     st.success("Perubahan berhasil disimpan!")
                     st.rerun()  # Refresh 
+
+    st.markdown("---")
+
+
+    # Menambahkan aturan baru
+    st.header("🏷️ Tambah Pertanyaan dan Kriterianya")
+
+    jurusan_list = get_kode_jurusan()
+    kriteria_list = get_kode_kriteria() 
+    col4, col5, col6 = st.columns([4,1,1])
+    with col4:
+        kriteria_selected = st.multiselect("Pilih kode kriteria yang akan menjadi aturan jurusan:", kriteria_list)
+
+    with col5:
+        jurusan_selected = st.selectbox("Pilih kode jurusan:", jurusan_list)
+
+    with col6:
+        st.markdown("""<p style="margin-top:1.7rem;"></p>""", unsafe_allow_html=True)
+
+        if st.button("Tambahkan Aturan", use_container_width=True):
+            if jurusan_selected and kriteria_selected:
+                pesan = add_aturan(kriteria_selected, jurusan_selected)
+                
+                if "✅" in pesan:
+                    st.success(pesan)
+                    st.rerun()  # Refresh
+                else:
+                    st.warning(pesan)  # Tampilkan pesan kesalahan
+            else:
+                st.warning("Harap isi semua bidang sebelum menambahkan aturan.")
+

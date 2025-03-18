@@ -5,7 +5,7 @@ from models.rekomendasi_model import *
 from pages.component.chart_tree import generate_tree
 
 # Halaman Home
-st.title( f"🎓Sistem Rekomendasi Jurusan Kuliah STMIK Palangkaraya" )
+st.title( f"🎓 Sistem Rekomendasi Jurusan Kuliah STMIK Palangkaraya" )
 st.markdown("---")
 
 # Inisialisasi tempat simpan jawaban di session_state
@@ -125,9 +125,14 @@ def tampilkan_form():
 
                 if kriteria_user:
                     kode_unik = simpan_jawaban(st.session_state["jawaban_user"], user_id)
-                    print(f"🔍 DEBUG user_id: {user_id}")
+                    # print(f"🔍 DEBUG user_id: {user_id}")
 
-                    success_massage = f"✅ Jawaban berhasil disimpan dengan kode: `{kode_unik}`"
+                    success_massage = f"✅ Jawaban berhasil disimpan dengan kode unik berikut:"
+
+                    # Tampilan kode unik dengan format Markdown
+                    st.markdown(f"""
+                        
+                    """, unsafe_allow_html=True)
                     # Konversi jawaban_user ke data_riwayat (list kode kriteria)
                     data_riwayat = kriteria_user  # Pastikan kriteria_user berupa list kode kriteria
 
@@ -140,7 +145,11 @@ def tampilkan_form():
 
     # Tampilkan pesan setelah tombol diklik
     if success_massage:
+        # Tampilkan pesan sukses
         st.success(success_massage)
+        # Tampilkan kode unik dalam blok kode
+        st.markdown(f"```sh\n{kode_unik}\n```")
+
     if warning_massage:
         st.warning(warning_massage)
     
@@ -153,12 +162,21 @@ def tampilkan_form():
             dot = generate_tree(data_riwayat)
             st.graphviz_chart(dot)
         with right:
+            # Urutkan berdasarkan persen tertinggi
+            sorted_rekomendasi = sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True)
+            
+            # Ambil jurusan dengan skor tertinggi
+            top_jurusan, top_persen = sorted_rekomendasi[0]
+
             # Tampilkan hasil rekomendasi
             st.markdown("### 📊 Hasil Rekomendasi")
             for jurusan, persen in sorted(hasil_rekomendasi.items(), key=lambda x: x[1], reverse=True):
                 st.progress(persen / 100)
                 st.write(f"**{jurusan}: {persen:.2f}%**")
-    
+
+            st.success(f"🎓 Berdasarkan kriteria yang Anda pilih, **{top_jurusan}** adalah jurusan yang paling sesuai. "
+            "Jalan menuju masa depan Anda terbuka lebar! Teruslah belajar dan kejar impian Anda! 💪🚀")
+        
     current_page = st.session_state["kategori_index"] + 1
     total_pages = len(kategori_list)
     st.markdown(f"""<p style='text-align: center; margin-top: 3rem;'>Halaman {current_page} dari {total_pages}</p>""", unsafe_allow_html=True)

@@ -101,7 +101,7 @@ st.markdown("""
     <div style='text-align: center;'>
         <h4>👨‍💻 Tim Pengembang</h4>
         <p style='margin:0'>Riyan Fazri Rahman | Raf'at Amin Jayadi | Alif Rahmatullah Lesmana</p>
-        <p style='margin:0'>Nazia Fitra Aini | Oga Luisca Mika Sangga</p>
-        <p>STMIK Palangka Raya - 2025</p>
+        <p style='margin-bottom: 2rem'>Nazia Fitra Aini | Oga Luisca Mika Sangga</p>
+        <a href="https://www.stmikplk.ac.id/" style="text-decoration:none; color: #FF3333;">STMIK Palangka Raya - 2025</a>
     </div>
     """, unsafe_allow_html=True)

@@ -11,11 +11,12 @@ if "logged_in" not in st.session_state:
 # Layout form login/register
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    with st.container(border=True):
+    with st.container():
         st.title("🔑 Selamat Datang!")
 
         # Tabs Login & Register
         tab_login, tab_register = st.tabs(["🔓 Login", "📝 Register"])
+        st.markdown("---")
         st.markdown("Pilih tab di atas untuk **Login** atau **Register**.")
 
         with tab_login:
